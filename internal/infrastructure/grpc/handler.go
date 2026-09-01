@@ -11,10 +11,9 @@ import (
 
 type Handler struct {
 	inventoryv1.UnimplementedInventoryServiceServer
-	svc service.InventoryService // <-- Remova o '*' aqui
+	svc service.InventoryService
 }
 
-// Remova o '*' do tipo do argumento aqui
 func NewHandler(svc service.InventoryService) *Handler {
 	return &Handler{svc: svc}
 }
