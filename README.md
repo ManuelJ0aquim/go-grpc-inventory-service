@@ -1,29 +1,29 @@
 # Go gRPC Inventory Service
 
-Microserviço de inventário desenvolvido em Go, utilizando gRPC, Protocol Buffers, PostgreSQL e Docker.
+Inventory microservice built in Go, using gRPC, Protocol Buffers, PostgreSQL, and Docker.
 
-O serviço é responsável por consultar a disponibilidade de produtos e realizar reservas de estoque de forma transacional e segura contra concorrência.
-
----
-
-## 🎯 Objetivo
-
-Este projeto simula um **Inventory Service** dentro de uma arquitetura baseada em microserviços.
-
-O serviço disponibiliza duas operações principais:
-
-- **`CheckStock`**: verifica se existe estoque suficiente para um determinado produto.
-- **`ReserveStock`**: reserva uma quantidade do produto, decrementando o estoque de forma segura.
-
-### Fluxo de Comunicação
-
-![Arquitetura do Go gRPC Inventory Service](docs/screenshots/image.png)
+The service is responsible for checking product availability and performing stock reservations in a transactional way, safe against concurrency.
 
 ---
 
-## 🏗️ Arquitetura
+## Objective
 
-O projeto adota uma arquitetura em camadas bem delimitada:
+This project simulates an **Inventory Service** within a microservices architecture.
+
+The service provides two main operations:
+
+- **`CheckStock`**: checks whether there is enough stock for a given product.
+- **`ReserveStock`**: reserves a quantity of the product, safely decrementing the stock.
+
+### Communication Flow
+
+![Go gRPC Inventory Service Architecture](docs/screenshots/image.png)
+
+---
+
+## Architecture
+
+The project follows a well-defined layered architecture:
 
 ```
 ┌─────────────────────────────┐
@@ -49,16 +49,16 @@ O projeto adota uma arquitetura em camadas bem delimitada:
 └─────────────────────────────┘
 ```
 
-### Camadas
+### Layers
 
-- **Domain**: contém as entidades e os erros de negócio.
-- **Service**: contém as regras de negócio relacionadas ao controle de estoque.
-- **Repository**: responsável pela persistência de dados no PostgreSQL.
-- **gRPC Handler**: expõe as operações do serviço através da API gRPC.
+- **Domain**: contains business entities and domain errors.
+- **Service**: contains the business rules related to stock control.
+- **Repository**: responsible for data persistence in PostgreSQL.
+- **gRPC Handler**: exposes the service operations through the gRPC API.
 
 ---
 
-## 🚀 Tecnologias
+## Technologies
 
 - **Go** 1.25
 - **gRPC**
@@ -69,7 +69,7 @@ O projeto adota uma arquitetura em camadas bem delimitada:
 
 ---
 
-## 📁 Estrutura do projeto
+## Project Structure
 
 ```text
 .
@@ -105,35 +105,35 @@ O projeto adota uma arquitetura em camadas bem delimitada:
 
 ---
 
-## ⚙️ Pré-requisitos
+## Prerequisites
 
-Antes de iniciar, certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
+Before getting started, make sure you have the following tools installed:
 
 - [Go](https://go.dev/)
 - [Docker](https://docs.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
 - `protoc` (Protocol Buffers Compiler)
-- [`grpcurl`](https://github.com/fullstorydev/grpcurl) (para testes da API gRPC via CLI)
+- [`grpcurl`](https://github.com/fullstorydev/grpcurl) (for testing the gRPC API via CLI)
 
 ---
 
-## ▶️ Executando o projeto
+## Running the Project
 
-Clone o repositório:
+Clone the repository:
 
 ```bash
 git clone https://github.com/ManuelJ0aquim/go-grpc-inventory-service.git
 cd go-grpc-inventory-service
 ```
 
-Suba a infraestrutura via Docker:
+Start the infrastructure with Docker:
 
 ```bash
 make docker-up
 ```
 
-O comando iniciará o PostgreSQL na porta `5432` e o Inventory Service na porta `50051`.
+This command will start PostgreSQL on port `5432` and the Inventory Service on port `50051`.
 
-Verifique os containers em execução:
+Check the running containers:
 
 ```bash
 docker ps
@@ -141,9 +141,9 @@ docker ps
 
 ---
 
-## 🗄️ Banco de dados
+## Database
 
-A aplicação utiliza PostgreSQL. A migration inicial cria a seguinte estrutura de tabela:
+The application uses PostgreSQL. The initial migration creates the following table structure:
 
 ```sql
 CREATE TABLE inventory (
@@ -153,15 +153,15 @@ CREATE TABLE inventory (
 );
 ```
 
-### Carga de dados inicial
+### Initial Seed Data
 
-| Produto | Estoque inicial |
-| ------- | --------------- |
-| prod-1  | 100             |
-| prod-2  | 50              |
-| prod-3  | 0               |
+| Product | Initial Stock |
+| ------- | ------------- |
+| prod-1  | 100           |
+| prod-2  | 50            |
+| prod-3  | 0             |
 
-Para consultar os dados diretamente no banco:
+To query the data directly from the database:
 
 ```bash
 docker exec -it inventory_postgres \
@@ -171,13 +171,13 @@ docker exec -it inventory_postgres \
 
 ---
 
-## 🔌 API gRPC
+## gRPC API
 
-O contrato gRPC está definido em `api/proto/inventory/v1/inventory.proto`.
+The gRPC contract is defined in `api/proto/inventory/v1/inventory.proto`.
 
 ### CheckStock
 
-Verifica se há estoque suficiente para o produto solicitado.
+Checks whether there is enough stock for the requested product.
 
 ```protobuf
 rpc CheckStock(CheckStockRequest) returns (CheckStockResponse);
@@ -185,7 +185,7 @@ rpc CheckStock(CheckStockRequest) returns (CheckStockResponse);
 
 ### ReserveStock
 
-Realiza a reserva, decrementando a quantidade solicitada do estoque.
+Performs the reservation, decrementing the requested quantity from stock.
 
 ```protobuf
 rpc ReserveStock(ReserveStockRequest) returns (ReserveStockResponse);
@@ -193,11 +193,11 @@ rpc ReserveStock(ReserveStockRequest) returns (ReserveStockResponse);
 
 ---
 
-## 🧪 Testando a aplicação
+## Testing the Application
 
-Você pode utilizar o `grpcurl` para interagir com os métodos gRPC.
+You can use `grpcurl` to interact with the gRPC methods.
 
-### 1. CheckStock — estoque disponível
+### 1. CheckStock — stock available
 
 ```bash
 grpcurl -plaintext \
@@ -207,7 +207,7 @@ grpcurl -plaintext \
   inventory.v1.InventoryService/CheckStock
 ```
 
-Resposta:
+Response:
 
 ```json
 {
@@ -216,7 +216,7 @@ Resposta:
 }
 ```
 
-### 2. CheckStock — estoque insuficiente
+### 2. CheckStock — insufficient stock
 
 ```bash
 grpcurl -plaintext \
@@ -226,7 +226,7 @@ grpcurl -plaintext \
   inventory.v1.InventoryService/CheckStock
 ```
 
-Resposta:
+Response:
 
 ```json
 {
@@ -234,9 +234,9 @@ Resposta:
 }
 ```
 
-> **Nota:** no Protobuf v3, campos booleanos com valor `false` usam o valor padrão e podem ser omitidos na serialização JSON — por isso `available` não aparece na resposta acima.
+> **Note:** in Protobuf v3, boolean fields with a `false` value use the default value and can be omitted from JSON serialization — that's why `available` does not appear in the response above.
 
-### 3. ReserveStock — reserva realizada
+### 3. ReserveStock — reservation completed
 
 ```bash
 grpcurl -plaintext \
@@ -246,43 +246,43 @@ grpcurl -plaintext \
   inventory.v1.InventoryService/ReserveStock
 ```
 
-Resposta:
+Response:
 
 ```json
 {
   "success": true,
-  "message": "Estoque reservado com sucesso"
+  "message": "Stock reserved successfully"
 }
 ```
 
 ---
 
-## 📸 Testes via Postman
+## Testing via Postman
 
-Além dos testes via `grpcurl`, o serviço também foi testado utilizando o **Postman** (com suporte a gRPC).
+In addition to testing via `grpcurl`, the service was also tested using **Postman** (with gRPC support).
 
-### 1. CheckStock — `prod-3` com estoque zerado
+### 1. CheckStock — `prod-3` with zero stock
 
 ![CheckStock prod-3](docs/screenshots/Screenshot%202026-09-11%20114502.png)
 
-### 2. ReserveStock — `prod-3`, quantidade 20 → estoque insuficiente
+### 2. ReserveStock — `prod-3`, quantity 20 → insufficient stock
 
-![ReserveStock prod-3 insuficiente](docs/screenshots/Screenshot%202026-09-11%20114633.png)
+![ReserveStock prod-3 insufficient](docs/screenshots/Screenshot%202026-09-11%20114633.png)
 
-### 3. ReserveStock — `prod-2`, quantidade 50 → reserva realizada com sucesso
+### 3. ReserveStock — `prod-2`, quantity 50 → reservation completed successfully
 
-![ReserveStock prod-2 sucesso](docs/screenshots/Screenshot%202026-09-11%20114710.png)
+![ReserveStock prod-2 success](docs/screenshots/Screenshot%202026-09-11%20114710.png)
 
-### 4. CheckStock — `prod-1` com estoque disponível (40 unidades)
+### 4. CheckStock — `prod-1` with available stock (40 units)
 
 ![CheckStock prod-1](docs/screenshots/Screenshot%202026-09-11%20114756.png)
 
-### 5. CheckStock — `prod-2` com estoque atualizado após a reserva (0 unidades)
+### 5. CheckStock — `prod-2` with updated stock after the reservation (0 units)
 
-![CheckStock prod-2 atualizado](docs/screenshots/Screenshot%202026-09-11%20114816.png)
+![CheckStock prod-2 updated](docs/screenshots/Screenshot%202026-09-11%20114816.png)
 
 ---
 
-## 📄 Licença
+## License
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+This project is licensed under the MIT License. See the `LICENSE` file for more details.

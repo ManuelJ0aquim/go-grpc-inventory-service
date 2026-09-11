@@ -41,7 +41,6 @@ func (r *PostgresRepository) Reserve(productID string, quantity int32) error {
 	}
 	defer tx.Rollback()
 
-	// Lock pessimista na linha para evitar overselling
 	var currentStock int32
 	querySelect := `SELECT quantity FROM inventory WHERE product_id = $1 FOR UPDATE`
 	err = tx.QueryRowContext(ctx, querySelect, productID).Scan(&currentStock)

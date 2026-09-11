@@ -40,7 +40,6 @@ func main() {
 	}
 	log.Println("Conectado ao PostgreSQL com sucesso!")
 
-	// Injetando o PostgresRepository
 	repo := repository.NewPostgresRepository(db)
 	svc := service.NewInventoryService(repo)
 	handler := appGrpc.NewHandler(svc)

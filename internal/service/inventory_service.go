@@ -6,7 +6,6 @@ import (
 	"github.com/ManuelJ0aquim/go-grpc-inventory-service/internal/domain"
 )
 
-// Interface exposta para quem consome o service (como o Handler gRPC)
 type InventoryService interface {
 	CheckStock(ctx context.Context, productID string, quantity int32) (bool, int32, error)
 	ReserveStock(ctx context.Context, orderID, productID string, quantity int32) (bool, string, error)
